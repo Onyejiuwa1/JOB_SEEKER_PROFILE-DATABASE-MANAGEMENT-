@@ -1,0 +1,105 @@
+import mysql.connector
+
+#Establishing a connection between python and mysql
+mydb = mysql.connector.connect(
+    host = 'localhost',
+    user = 'root',
+    password = ''
+)
+
+
+# creating a database
+mycursor = mydb.cursor()
+mycursor.execute('CREATE DATABASE job')
+
+
+
+mydb = mysql.connector.connect(
+    host = 'localhost',
+    user = 'root',
+    password = '',
+    database = 'job'
+)
+
+# creating a table 
+job_table = ''' CREATE TABLE job_seeker_profile(
+                user_account_id INT NOT NULL primary key,
+                city VARCHAR(255) NOT NULL,
+                country VARCHAR(255) NOT NULL,
+                employment_type VARCHAR(255) NOT NULL,
+                first_name VARCHAR(255) NOT NULL,
+                last_name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                state VARCHAR(255) NOT NULL,
+                phone VARCHAR(255) NOT NULL) 
+                '''
+mycursor = mydb.cursor()
+mycursor.execute(job_table)
+
+
+# Inserting data into the table
+insert = ''' INSERT INTO
+             job_seeker_profile(user_account_id, city, country, employment_type, first_name, last_name, email, state, phone)
+             values(%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        '''
+
+place_h = [
+    (1, 'Calabar', 'Nigeria', 'Part-time', 'Wilson', 'Donald', 'willsdo12@gmail.com', 'Cross-River', '224-556-09'),
+    (2, 'Lokoja', 'Nigeria', 'Contract', 'James', 'Brown', 'jamesgaybrown@gmail.com', 'Kogi', '234-813-22'),
+    (3, 'Manchester', 'United Kingdom', 'Internship', 'Harry', 'Maguire', 'maggry@gmail.com', 'Manchester', '44-654-409-1'),
+    (4, 'Accra', 'Ghana', 'Full-time', 'Charlie', 'Boateng', 'bbateng@gmail.com', 'Accra', '233-766-908'),
+    (5, 'Asokoro', 'Nigeria', 'Contract', 'Chidera', 'Iloh', 'chidex881@gmail.com', 'FCT-Abuja', '234-905-22'),
+    (6, 'Ikeja', 'Nigeria', 'Temporal', 'Nifemi', 'Babalola', 'babsnifs@gmail.com', 'Lagos', '234-345-00'),
+    (7, 'South London','United Kingdom', 'Full-Time', 'Onono', 'Okon', 'ononookon419@gmail.com', 'London', '44-875-098-5')
+
+]
+mycursor = mydb.cursor()
+mycursor.executemany(insert,place_h)
+mydb.commit()
+
+
+
+# Read Operation
+mycursor = mydb.cursor()
+read = "SELECT * FROM job_seeker_profile"
+mycursor.execute(read)
+myresult = mycursor.fetchall()
+for r in myresult:
+    print(r)
+
+
+
+
+# Update Operation
+mycursor = mydb.cursor()
+update = "UPDATE job_seeker_profile SET phone = '234-556-09' WHERE user_account_id = 1 "
+mycursor.execute(update)
+mydb.commit
+
+
+
+# Adding records to all class members
+insert = ''' INSERT INTO
+             job_seeker_profile(user_account_id, city, country, employment_type, first_name, last_name, email, state, phone)
+             values(8, 'Ikeja', 'Nigeria', 'Internship', 'Lasisi', 'Elenu', 'lasisi22@gmail.com', 'Lagos', '234-839-238')
+        '''
+mycursor = mydb.cursor()
+mycursor.execute(insert)
+mydb.commit()
+
+
+
+# Delete Operation
+mycursor = mydb.cursor() 
+delete = "delete from job_seeker_profile where user_account_id = 8"
+mycursor.execute(delete)
+mydb.commit
+
+
+
+mycursor = mydb.cursor()
+read = "SELECT * FROM job_seeker_profile"
+mycursor.execute(read)
+myresult = mycursor.fetchall()
+for r in myresult:
+    print(r)
